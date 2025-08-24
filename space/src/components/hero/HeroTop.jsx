@@ -16,7 +16,7 @@ export default function HeroTop() {
           marginBottom: '1rem',
         }}
       >
-        Welcome to Print Monk India
+        Welcome to Malak press & printing
       </motion.h1>
 
       <motion.p

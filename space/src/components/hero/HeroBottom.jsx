@@ -94,7 +94,7 @@ export default function HeroBottom() {
             display: "inline-block",
           }}
         >
-          Print Monk is Central India’s leading brand for customized apparel and
+          Malak press and printing is Central India’s leading brand for customized apparel and
           accessories. Whether you need personalized clothing, caps, bags,
           sportswear, or corporate merchandise, we create products that showcase
           your brand with quality and style.

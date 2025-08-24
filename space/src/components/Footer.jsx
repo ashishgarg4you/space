@@ -94,7 +94,7 @@ export default function Footer() {
                   className="text-decoration-none text-dark"
                   style={{ fontSize: 14 }}
                 >
-                  info@printmonkindia.com
+                  info@malakprinting.com
                 </a>
               </div>
             </div>
@@ -121,7 +121,7 @@ export default function Footer() {
       <div className="bg-dark text-light">
         <Container>
           <div className="d-flex flex-column flex-md-row justify-content-between align-items-center py-3">
-            <small>© Print Monk India, {year}. All Rights Reserved</small>
+            <small>© malak printing press, {year}. All Rights Reserved</small>
             <div className="d-flex gap-3 mt-2 mt-md-0">
               <a
                 href="/privacy"
