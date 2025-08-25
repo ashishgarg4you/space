@@ -1,55 +1,65 @@
 import React from "react";
 
-export default function Card({ image, title, subtitle, ctaText }) {
+export default function Card({ image, title, subtitle, ctaText, onCtaClick }) {
   return (
     <div
-      className="card h-100 border-0"
+      className="card border-0 shadow-sm h-100"
       style={{
         position: "relative",
         borderRadius: 16,
         overflow: "hidden",
+        transition: "transform 0.25s ease, box-shadow 0.25s ease",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      {/* Image wrapper (scales image only) */}
-      <div style={{ overflow: "hidden" }}>
+      {/* Image wrapper (fills available space) */}
+      <div
+        style={{
+          flex: "1 1 auto",
+          overflow: "hidden",
+          borderTopLeftRadius: 16,
+          borderTopRightRadius: 16,
+        }}
+      >
         <img
           src={image}
           alt={title}
-          className="w-100"
+          className="w-100 h-100"
           style={{
             objectFit: "cover",
-            height: "100%",
-            transition: "transform 0.4s ease",
+            transition: "transform 0.5s ease",
           }}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.08)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
         />
       </div>
 
-      {/* Overlay text (not clipped, sits above image) */}
+      {/* Content (same height area for all cards) */}
       <div
-        className="card-img-overlay d-flex flex-column justify-content-end p-3"
+        className="p-3 d-flex flex-column justify-content-end"
         style={{
-          background: "linear-gradient(to top, rgba(0,0,0,0.6), transparent)",
-          borderRadius: 16,
-          zIndex: 2,
-          pointerEvents: "none", // text stays visible
+          background: "linear-gradient(to top, rgba(0,0,0,0.65), transparent)",
+          color: "white",
+          minHeight: "140px", // 🔑 ensures all cards line up
         }}
       >
-        <h6
-          className="text-light mb-1"
-          style={{ pointerEvents: "auto" }}
-        >
-          {subtitle}
-        </h6>
-        <h5
-          className="text-white fw-bold"
-          style={{ pointerEvents: "auto" }}
-        >
+        {subtitle && (
+          <h6 className="text-light mb-1" style={{ margin: 0 }}>
+            {subtitle}
+          </h6>
+        )}
+        <h5 className="fw-bold" style={{ margin: 0 }}>
           {title}
         </h5>
         {ctaText && (
           <button
-            className="btn btn-sm btn-light mt-2"
-            style={{ pointerEvents: "auto" }}
+            className="btn btn-sm btn-light mt-2 align-self-start"
+            style={{
+              borderRadius: 20,
+              fontWeight: 500,
+            }}
+            onClick={onCtaClick}
           >
             {ctaText}
           </button>

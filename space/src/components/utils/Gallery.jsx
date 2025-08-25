@@ -9,13 +9,16 @@ export default function Gallery({ items = [], onCardClick }) {
         {items.map((item, idx) => (
           <motion.div
             key={item.id}
-            className="col-12 col-md-6"
+            className="col-12 col-md-6 d-flex"  // 🔑 makes columns flex containers
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.2, duration: 0.5, ease: "easeOut" }}
           >
-            <div
-              className="shadow-sm"
+            {/* Direct card wrapper */}
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              transition={{ duration: 0.3 }}
+              className="shadow-sm flex-grow-1" // 🔑 forces equal height inside flex column
               style={{
                 borderRadius: 16,
                 cursor: "pointer",
@@ -24,20 +27,13 @@ export default function Gallery({ items = [], onCardClick }) {
               }}
               onClick={() => onCardClick?.(item)}
             >
-              {/* Animate only image wrapper */}
-              <motion.div
-                whileHover={{ scale: 1.08 }}
-                transition={{ duration: 0.4 }}
-                style={{ borderRadius: 16 }}
-              >
-                <Card
-                  image={item.image}
-                  title={item.title}
-                  subtitle={item.subtitle}
-                  ctaText={item.ctaText}
-                />
-              </motion.div>
-            </div>
+              <Card
+                image={item.image}
+                title={item.title}
+                subtitle={item.subtitle}
+                ctaText={item.ctaText}
+              />
+            </motion.div>
           </motion.div>
         ))}
       </div>
