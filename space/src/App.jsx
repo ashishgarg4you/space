@@ -1,14 +1,19 @@
-import { useState } from "react";
+// App.js
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "./components/Data/firebase";
+
 import NavBar from "./components/Navbar";
 import Footer from "./components/Footer";
 import HeroSection from "./components/hero/HeroSection";
 import ProductsSection from "./components/Product/ProductsSection";
 import Login from "./components/Login";
-import PageWrapper from "./components/utils/PageWrapper"; // 👈 import wrapper
+import Register from "./components/Register";
+import PageWrapper from "./components/utils/PageWrapper";
 
 const HomePage = () => (
-  <PageWrapper noPadding>   {/* hero needs no padding */}
+  <PageWrapper noPadding>
     <HeroSection />
     <ProductsSection />
   </PageWrapper>
@@ -33,10 +38,24 @@ const ContactPage = () => (
 
 export default function App() {
   const [showLogin, setShowLogin] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+  const [user, setUser] = useState(null);
+
+  // ✅ Listen for login/logout changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
   return (
     <>
-      <NavBar onLoginClick={() => setShowLogin(true)} />
+      <NavBar
+        user={user}
+        onLoginClick={() => setShowLogin(true)}
+        onLogoutClick={() => signOut(auth)}
+      />
 
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -57,9 +76,22 @@ export default function App() {
       {showLogin && (
         <Login
           onClose={() => setShowLogin(false)}
-          onLogin={async (form) => console.log("login", form)}
+          onLogin={async () => setShowLogin(false)}
           onForgot={() => console.log("forgot")}
-          onRegister={() => console.log("register")}
+          onRegister={() => {
+            setShowLogin(false);
+            setShowRegister(true);
+          }}
+        />
+      )}
+
+      {showRegister && (
+        <Register
+          onClose={() => setShowRegister(false)}
+          onLogin={() => {
+            setShowRegister(false);
+            setShowLogin(true);
+          }}
         />
       )}
     </>

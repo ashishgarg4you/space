@@ -1,12 +1,14 @@
+// src/components/NavBar.jsx
 import { useEffect, useLayoutEffect, useState } from "react";
+import { FaUserCircle } from "react-icons/fa"; // 👈 user icon
 import logo from "../assets/logo.jpg";
 
-const NAVBAR_HEIGHT = 80; // keep height constant to avoid layout jumps
+const NAVBAR_HEIGHT = 80;
 
-export default function NavBar({ onLoginClick }) {
+export default function NavBar({ onLoginClick, user }) {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // Ensure correct state on first paint (no flicker on refresh)
   useLayoutEffect(() => {
     setScrolled(window.scrollY > 50);
   }, []);
@@ -17,7 +19,7 @@ export default function NavBar({ onLoginClick }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const isLight = scrolled; // light variant after scroll, dark at top
+  const isLight = scrolled;
 
   return (
     <>
@@ -26,8 +28,9 @@ export default function NavBar({ onLoginClick }) {
           isLight ? "navbar-light" : "navbar-dark"
         }`}
         style={{
-          // glass at top, solid on scroll
-          background: isLight ? "rgba(255,255,255,0.98)" : "rgba(18,18,18,0.45)",
+          background: isLight
+            ? "rgba(255,255,255,0.98)"
+            : "rgba(18,18,18,0.45)",
           color: isLight ? "#111" : "#fff",
           backdropFilter: "blur(10px)",
           WebkitBackdropFilter: "blur(10px)",
@@ -52,19 +55,22 @@ export default function NavBar({ onLoginClick }) {
             />
           </a>
 
-          {/* Toggler */}
+          {/* Mechanical Toggler */}
           <button
             className="navbar-toggler"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarMain"
             aria-controls="navbarMain"
-            aria-expanded="false"
+            aria-expanded={menuOpen}
             aria-label="Toggle navigation"
-            // Add a subtle focus ring to make it feel "mechanical"
-            style={{ outline: "none", boxShadow: "none" }}
-            onFocus={(e) => (e.currentTarget.style.boxShadow = "0 0 0 0.2rem rgba(13,110,253,.25)")}
-            onBlur={(e) => (e.currentTarget.style.boxShadow = "none")}
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={{
+              outline: "none",
+              boxShadow: "none",
+              transition: "transform 300ms ease",
+              transform: menuOpen ? "rotate(90deg)" : "rotate(0deg)",
+            }}
           >
             <span className="navbar-toggler-icon" />
           </button>
@@ -85,48 +91,91 @@ export default function NavBar({ onLoginClick }) {
                       marginInline: 8,
                       fontWeight: 500,
                       position: "relative",
-                      transition: "opacity 180ms ease",
-                      opacity: 1,
+                      transition: "color 200ms ease",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
-                    onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                   >
                     {link.label}
+                    {/* Animated underline */}
+                    <span
+                      style={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        width: "100%",
+                        height: 2,
+                        backgroundColor: isLight ? "#111" : "#fff",
+                        transform: "scaleX(0)",
+                        transformOrigin: "right",
+                        transition: "transform 250ms ease",
+                      }}
+                      className="nav-underline"
+                    />
                   </a>
                 </li>
               ))}
 
-              {/* Login button */}
-              <li className="nav-item ms-lg-2 mt-2 mt-lg-0">
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={onLoginClick}
-                  style={{
-                    borderRadius: 999,
-                    padding: "8px 18px",
-                    transition: "transform 120ms ease, box-shadow 180ms ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-1px)";
-                    e.currentTarget.style.boxShadow =
-                      "0 8px 20px rgba(13,110,253,0.25)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
-                >
-                  Login
-                </button>
+              {/* If user is logged in → Show user icon, else show login */}
+              <li className="nav-item ms-lg-3 mt-2 mt-lg-0">
+                {user ? (
+                  <div className="d-flex align-items-center">
+                    <FaUserCircle
+                      size={28}
+                      color={isLight ? "#111" : "#fff"}
+                      style={{ cursor: "pointer" }}
+                      title={user.email}
+                    />
+                    <span
+                      style={{
+                        marginLeft: 8,
+                        fontWeight: 500,
+                        color: isLight ? "#111" : "#fff",
+                      }}
+                    >
+                      {user.displayName || user.email}
+                    </span>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={onLoginClick}
+                    style={{
+                      borderRadius: 999,
+                      padding: "8px 18px",
+                      transition:
+                        "transform 150ms ease, box-shadow 200ms ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                      e.currentTarget.style.boxShadow =
+                        "0 8px 20px rgba(13,110,253,0.25)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow = "none";
+                    }}
+                  >
+                    Login
+                  </button>
+                )}
               </li>
             </ul>
           </div>
         </div>
       </nav>
 
-      {/* Spacer to push content below fixed navbar */}
+      {/* Spacer */}
       <div style={{ height: NAVBAR_HEIGHT }} />
+
+      {/* Little inline JS for underline animation */}
+      <style>
+        {`
+          .nav-link:hover .nav-underline {
+            transform: scaleX(1);
+            transform-origin: left;
+          }
+        `}
+      </style>
     </>
   );
 }

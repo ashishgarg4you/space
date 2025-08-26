@@ -10,22 +10,25 @@ export default function Footer() {
       <Container className="py-5">
         <Row className="g-4">
           {/* Logo / About */}
-          <Col xs={12} lg={4}>
+          <Col xs={12} lg={3}>
             <div className="d-flex align-items-center gap-3">
               <img
                 src="/logo-printmonk.png" // replace with your logo path
-                alt="Print Monk India"
+                alt="Malak Press & Print"
                 style={{ height: 64, width: "auto" }}
               />
             </div>
-            <p className="mt-3 mb-0 text-muted" style={{ fontSize: 14, lineHeight: 1.6 }}>
+            <p
+              className="mt-3 mb-0 text-muted"
+              style={{ fontSize: 14, lineHeight: 1.6 }}
+            >
               Central India’s trusted partner for customized apparel, corporate
               gifts, and promotional products.
             </p>
           </Col>
 
           {/* Company links */}
-          <Col xs={12} sm={6} lg={4}>
+          <Col xs={12} sm={6} lg={3}>
             <h6 className="text-uppercase mb-3" style={{ letterSpacing: 1 }}>
               Company
             </h6>
@@ -57,7 +60,7 @@ export default function Footer() {
           </Col>
 
           {/* Contact Info */}
-          <Col xs={12} sm={6} lg={4}>
+          <Col xs={12} sm={6} lg={3}>
             <h6 className="text-uppercase mb-3" style={{ letterSpacing: 1 }}>
               Contact Info
             </h6>
@@ -65,11 +68,11 @@ export default function Footer() {
             <div className="mb-2">
               <small className="text-muted">Address</small>
               <div style={{ fontSize: 14 }}>
-                Shop No-04, Plot No-09,
+                Chatrapati Shivaji Maharaj Chowk,
                 <br />
-                Prabhakar Planic Appt, OPP ICICI ATM,
+                Niphad, Nashik, Maharashtra
                 <br />
-                Uday Nagar, Nagpur
+                422303
               </div>
             </div>
 
@@ -90,7 +93,7 @@ export default function Footer() {
               <small className="text-muted">Email</small>
               <div>
                 <a
-                  href="mailto:info@printmonkindia.com"
+                  href="mailto:info@malakprinting.com"
                   className="text-decoration-none text-dark"
                   style={{ fontSize: 14 }}
                 >
@@ -98,20 +101,24 @@ export default function Footer() {
                 </a>
               </div>
             </div>
+          </Col>
 
-            {/* Socials */}
-            <div className="d-flex align-items-center gap-2">
-              {socialLinks.map(({ href, icon, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  className="d-inline-flex align-items-center justify-content-center"
-                  style={socialBtnStyle}
-                >
-                  <i className={icon} />
-                </a>
-              ))}
+          {/* Google Maps */}
+          <Col xs={12} lg={3}>
+            <h6 className="text-uppercase mb-3" style={{ letterSpacing: 1 }}>
+              Find Us
+            </h6>
+            <div style={{ borderRadius: 8, overflow: "hidden" }}>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1163.7277995703332!2d74.10885706963161!3d20.077655298834028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bddcff73cf6ed37%3A0x6e21f9a78a363792!2sMalak%20Press%20%26%20Print!5e1!3m2!1sen!2sin!4v1756130986281!5m2!1sen!2sin"
+                width="100%"
+                height="200"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Malak Press & Print Location"
+              ></iframe>
             </div>
           </Col>
         </Row>
@@ -121,7 +128,7 @@ export default function Footer() {
       <div className="bg-dark text-light">
         <Container>
           <div className="d-flex flex-column flex-md-row justify-content-between align-items-center py-3">
-            <small>© malak printing press, {year}. All Rights Reserved</small>
+            <small>© Malak Press & Print, {year}. All Rights Reserved</small>
             <div className="d-flex gap-3 mt-2 mt-md-0">
               <a
                 href="/privacy"
@@ -141,45 +148,6 @@ export default function Footer() {
           </div>
         </Container>
       </div>
-
-      {/* Back to top button */}
-      <button
-        type="button"
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        aria-label="Back to top"
-        className="position-fixed d-none d-md-inline-flex align-items-center justify-content-center"
-        style={{
-          right: 16,
-          bottom: 16,
-          width: 44,
-          height: 44,
-          borderRadius: "50%",
-          border: "1px solid rgba(255,255,255,0.35)",
-          background: "#1f2328",
-          color: "#fff",
-          zIndex: 1000,
-        }}
-      >
-        <i className="bi bi-chevron-up" />
-      </button>
     </footer>
   );
 }
-
-// social links config
-const socialLinks = [
-  { href: "https://facebook.com/printmonk", icon: "bi bi-facebook", label: "Facebook" },
-  { href: "https://x.com/printmonk", icon: "bi bi-twitter-x", label: "X" },
-  { href: "https://instagram.com/printmonkindia", icon: "bi bi-instagram", label: "Instagram" },
-];
-
-// inline style object for social buttons
-const socialBtnStyle = {
-  width: 36,
-  height: 36,
-  borderRadius: "50%",
-  background: "#fff",
-  color: "#333",
-  border: "1px solid rgba(0,0,0,0.1)",
-  fontSize: 16,
-};

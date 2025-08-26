@@ -1,39 +1,32 @@
 import React, { useState } from "react";
-import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./Data/firebase";
 
-export default function Login({ onClose, onRegister }) {
+export default function Register({ onClose, onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Map Firebase error codes to friendly messages
   const errorMessages = {
-    "auth/invalid-credential": "Invalid email or password.",
-    "auth/user-not-found": "No account found with this email.",
-    "auth/wrong-password": "Incorrect password.",
-    "auth/invalid-email": "Invalid email address.",
-    "auth/too-many-requests": "Too many failed attempts. Please try later."
+    "auth/email-already-in-use": "This email is already registered.",
+    "auth/invalid-email": "Invalid email format.",
+    "auth/weak-password": "Password should be at least 6 characters.",
   };
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      return setError("Passwords do not match.");
+    }
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      alert("✅ Login successful!");
+      await createUserWithEmailAndPassword(auth, email, password);
+      alert("🎉 Account created successfully!");
       onClose?.();
     } catch (err) {
       setError(errorMessages[err.code] || "Something went wrong. Try again.");
-    }
-  };
-
-  const handleForgotPassword = async () => {
-    if (!email) return alert("Enter your email first.");
-    try {
-      await sendPasswordResetEmail(auth, email);
-      alert("📩 Reset link sent to your email.");
-    } catch (err) {
-      setError(errorMessages[err.code] || err.message);
     }
   };
 
@@ -45,12 +38,12 @@ export default function Login({ onClose, onRegister }) {
       <div className="bg-white rounded shadow p-4" style={{ width: 400 }}>
         {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h5 className="mb-0">Login</h5>
+          <h5 className="mb-0">Register</h5>
           <button className="btn-close" onClick={onClose}></button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleRegister}>
           <div className="mb-3">
             <label className="form-label">Email</label>
             <input
@@ -71,17 +64,25 @@ export default function Login({ onClose, onRegister }) {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          <div className="mb-3">
+            <label className="form-label">Confirm Password</label>
+            <input
+              className="form-control"
+              type="password"
+              required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
           {error && <p className="text-danger small">{error}</p>}
-          <button className="btn btn-primary w-100">Login</button>
+          <button className="btn btn-success w-100">Register</button>
         </form>
 
         {/* Links */}
         <div className="d-flex justify-content-between mt-3">
-          <button className="btn btn-link p-0" onClick={handleForgotPassword}>
-            Forgot Password?
-          </button>
-          <button className="btn btn-link p-0" onClick={onRegister}>
-            Register
+          <span className="text-muted small">Already have an account?</span>
+          <button className="btn btn-link p-0" onClick={onLogin}>
+            Login
           </button>
         </div>
       </div>
